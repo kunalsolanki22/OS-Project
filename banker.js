@@ -1,0 +1,117 @@
+function bankersAlgorithm() {
+    // Get input values
+    let n = parseInt(document.getElementById('noOfProcesses').value);
+    let m = parseInt(document.getElementById('typesOfResources').value);
+
+    let alloc = [];
+    let max = [];
+    for (let i = 0; i < n; i++) {
+      alloc[i] = [];
+      max[i] = [];
+      for (let j = 0; j < m; j++) {
+        alloc[i][j] = parseInt(document.getElementById('allocP' + i + 'R' + j).value);
+        max[i][j] = parseInt(document.getElementById('maxP' + i + 'R' + j).value);
+      }
+    }
+
+    let totalResources = [];
+    for (let j = 0; j < m; j++) {
+      totalResources[j] = parseInt(document.getElementById('totalResource' + j).value);
+    }
+
+    let sumAllocated = new Array(m).fill(0);
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < m; j++) {
+        sumAllocated[j] += alloc[i][j];
+      }
+    }
+    
+    let avail = totalResources.map((value, index) => value - sumAllocated[index]);
+
+    // Banker's Algorithm logic
+    let f = new Array(n).fill(0);
+    let ans = [];
+    let ind = 0;
+    let need = [];
+    for (let i = 0; i < n; i++) {
+      let need1 = [];
+      for (let j = 0; j < m; j++) {
+        need1.push(max[i][j] - alloc[i][j]);
+      }
+      need.push(need1);
+    }
+
+    let y = 0;
+    for (let k = 0; k < n; k++) {
+      for (let i = 0; i < n; i++) {
+        if (f[i] == 0) {
+          let flag = 0;
+          for (let j = 0; j < m; j++) {
+            if (need[i][j] > avail[j]) {
+              flag = 1;
+              break;
+            }
+          }
+
+          if (flag == 0) {
+            ans[ind++] = i;
+            for (y = 0; y < m; y++) {
+              avail[y] += alloc[i][y];
+            }
+            f[i] = 1;
+          }
+        }
+      }
+    }
+
+    // Display results
+    let resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = "Following is the SAFE Sequence" + "<br>";
+    for (let i = 0; i < n - 1; i++) {
+      resultDiv.innerHTML += " P" + ans[i] + " ->";
+    }
+    resultDiv.innerHTML += " P" + ans[n - 1] + "<br>";
+  }
+
+
+//   ------------------------------------------
+
+// Function to dynamically create input fields for total instances of each resource
+function createResourceInputs() {
+    let typesOfResources = parseInt(document.getElementById('typesOfResources').value);
+    let resourceInputsDiv = document.getElementById('resourceInputs');
+    resourceInputsDiv.innerHTML = '';
+
+    for (let i = 0; i < typesOfResources; i++) {
+      let inputId = 'totalResource' + i;
+      resourceInputsDiv.innerHTML += '<label for="' + inputId + '">Total instances of Resource ' + String.fromCharCode(65 + i) + ':</label>';
+      resourceInputsDiv.innerHTML += '<input type="text" id="' + inputId + '"><br>';
+    }
+  }
+
+  // Function to dynamically create input fields for allocation and max need of each process
+  function createProcessInputs() {
+    let typesOfResources = parseInt(document.getElementById('typesOfResources').value);
+    let noOfProcesses = parseInt(document.getElementById('noOfProcesses').value);
+    let processesDiv = document.getElementById('processes');
+    processesDiv.innerHTML = '';
+
+    for (let i = 0; i < noOfProcesses; i++) {
+      processesDiv.innerHTML += '<h3>Process ' + i + '</h3>';
+      for (let j = 0; j < typesOfResources; j++) {
+        let allocInputId = 'allocP' + i + 'R' + j;
+        let maxInputId = 'maxP' + i + 'R' + j;
+        processesDiv.innerHTML += '<label for="' + allocInputId + '">Allocation for Resource ' + String.fromCharCode(65 + j) + ':</label>';
+        processesDiv.innerHTML += '<input type="text" id="' + allocInputId + '"><br>';
+        processesDiv.innerHTML += '<label for="' + maxInputId + '">Max Need for Resource ' + String.fromCharCode(65 + j) + ':</label>';
+        processesDiv.innerHTML += '<input type="text" id="' + maxInputId + '"><br>';
+      }
+    }
+  }
+
+  // Update resource and process inputs when typesOfResources or noOfProcesses change
+  document.getElementById('typesOfResources').addEventListener('input', function() {
+    createResourceInputs();
+    createProcessInputs();
+  });
+  document.getElementById('noOfProcesses').addEventListener('input', createProcessInputs);

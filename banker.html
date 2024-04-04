@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banker's Algorithm</title>
+    <link rel="stylesheet" href="banker.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script></script> -->
+
+</head>
+<body class="jost-fonts">
+    <div class="container">
+        <div class="sidebar">
+            <div class="sticky">
+                <ul>
+                    <li><a href="#Intro">Introduction</a></li>
+                    <li><a href="#Theory">Theory</a></li>
+                    <li><a href="#Code">Code</a></li>
+                    <li><a href="#Sim">Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <span><h1>Banker's Algorithm</h1></span>
+            <div id="Intro" class="topic">
+                <h2>Introduction</h2>
+                <p>
+                    <p>The algorithm is designed to prevent deadlock by determining whether granting a resource request will leave the system in a safe state or not.</p>
+                    <p>In a system using the Banker's algorithm, each process must declare the maximum number of instances of each resource type it may need before it begins execution. The system then uses this information to determine whether a particular resource request can be granted without risking deadlock.</p>
+                    <p>The Banker's algorithm operates by maintaining several data structures, including an array to track the total available resources of each type, an array to track the maximum resources each process may request, an array to track the currently allocated resources for each process, and an array to track the remaining need of each process.</p>
+                    <p>When a process requests resources, the system checks if the request can be granted safely by comparing the request with the available resources and the resources currently allocated to other processes. If granting the request would not lead to a deadlock, the resources are allocated; otherwise, the process is blocked until the resources become available.</p>
+                    <p>By ensuring that resources are allocated in a way that avoids deadlock, the Banker's algorithm helps to improve the overall efficiency and reliability of a system.</p>
+                </p>
+            </div>
+            <div id="Theory" class="topic">
+                <h2>Theory</h2>
+                <p>
+                    <span class="headings">Characteristics of Banker's Algorithm</span>
+
+                    <p>The Banker's algorithm is a deadlock avoidance algorithm used in operating systems. It works by keeping track of the maximum and currently allocated resources of each process and the available resources in the system. It works as follows:</p>
+                    <ol>
+                        <li><strong>Initialization:</strong> The system initializes arrays to keep track of the maximum resources each process can request ('max'), the currently allocated resources ('allocation'), and the remaining available resources ('available').</li>
+                        <li><strong>Resource Request:</strong> When a process requests resources, the system checks if the request can be granted without leading to a deadlock. It does this by comparing the requested resources with the available resources and the resources currently allocated to other processes.</li>
+                        <li><strong>Safety Check:</strong> If granting the request would leave the system in a safe state (i.e., all processes can complete their execution), the request is granted, and the system updates the allocation and available resource arrays. If granting the request would lead to an unsafe state, the request is denied, and the process is blocked until the resources become available.</li>
+                        <li><strong>Resource Release:</strong> When a process releases resources, the system updates the allocation and available resource arrays accordingly.</li>
+                        <li><strong>Deadlock Avoidance:</strong> By ensuring that resources are allocated in a way that avoids deadlock, the Banker's algorithm prevents the system from entering a state where processes are waiting indefinitely for resources held by other processes.</li>
+                    </ol>
+                    
+                    <span class="headings">Advantages</span>
+                    <ul>
+                        <li><b>Prevents Deadlock:</b> The primary advantage of the Banker's algorithm is that it helps prevent deadlock by ensuring that resources are allocated in a safe sequence.</li>
+                        <li><b>Safety:</b>Safety: The algorithm guarantees that the system will not enter an unsafe state, where a process requests resources in a way that could lead to deadlock.</li>
+                        <li><b>Optimal Resource Utilization:</b> It allows for optimal resource utilization by allocating resources only if the system remains in a safe state.</li>
+                        <li><b>Dynamic Allocation:</b> It supports dynamic allocation of resources, meaning resources can be allocated and deallocated during the execution of a process.</li>
+                        <li><b>Fairness:</b> The algorithm ensures fairness by not favoring any particular process, as resources are allocated based on the current state of the system.</li>
+                    </ul>
+                    
+                    <span class="headings">Disadvantages</span>
+                    <ul>
+                        <li><b>Resource Utilization:</b> The algorithm may lead to underutilization of resources, as it may hold resources even when they are not currently needed by a process.</li>
+                        <li><b>Complexity:</b> Implementing the Banker's algorithm can be complex, especially in systems with a large number of resources and processes.</li>
+                        <li><b>Overhead:</b> The algorithm introduces overhead in terms of tracking the current state of the system and checking for safety before allocating resources.</li>
+                        <li><b>Blocking:</b> In certain cases, the algorithm may lead to processes being blocked unnecessarily, waiting for resources that could have been allocated.</li>
+                        <li><b>Resource Allocation Order:</b> The order in which resources are allocated can affect the efficiency of the algorithm, and finding the optimal allocation order can be challenging.</li>
+                    </ul>
+                </p>
+            </div>
+            <div id="Code" class="topic">
+                <h2>Code:</h2>
+                <p>
+                    <pre>
+                    <code>
+                    <strong>
+                        <span class="comment"># Banker's Algorithm</span>
+
+                        <span class="comment"># Driver code:</span>
+                        <span class="keyword">if</span> <span class="variable">__name__</span>=="<span class="keyword">__main__</span>":
+                            
+                            <span class="comment"># P0, P1, P2, P3, P4 are the Process names here</span>
+                            <span class="variable">n</span> = 5 <span class="comment"># Number of processes</span>
+                            <span class="variable">m</span> = 3 <span class="comment"># Number of resources</span>
+                            
+                            <span class="comment"># Allocation Matrix</span>
+                            <span class="variable">alloc</span> = [[0, 1, 0 ],[ 2, 0, 0 ],
+                                    [3, 0, 2 ],[2, 1, 1] ,[ 0, 0, 2]]
+                            
+                            <span class="comment"># MAX Matrix </span>
+                            <span class="variable">max</span> = [[7, 5, 3 ],[3, 2, 2 ],
+                                    [ 9, 0, 2 ],[2, 2, 2],[4, 3, 3]]
+                            
+                            <span class="variable">avail</span> = [3, 3, 2] <span class="comment"># Available Resources</span>
+                            
+                            <span class="variable">f</span> = [0]*<span class="variable">n</span>
+                            <span class="variable">ans</span> = [0]*<span class="variable">n</span>
+                            <span class="variable">ind</span> = 0
+                            <span class="keyword">for</span> <span class="variable">k</span> in <span class="function">range</span>(<span class="variable">n</span>):
+                                <span class="variable">f</span>[<span class="variable">k</span>] = 0
+                                
+                            <span class="variable">need</span> = [[ 0 <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">m</span>)]<span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span>)]
+                            <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span>):
+                                <span class="keyword">for</span> <span class="variable">j</span> in <span class="function">range</span>(<span class="variable">m</span>):
+                                    <span class="variable">need</span>[<span class="variable">i</span>][<span class="variable">j</span>] = <span class="variable">max</span>[<span class="variable">i</span>][<span class="variable">j</span>] - <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">j</span>]
+                            <span class="variable">y</span> = 0
+                            <span class="keyword">for</span> <span class="variable">k</span> in <span class="function">range</span>(5):
+                                <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span>):
+                                    <span class="keyword">if</span> (<span class="variable">f</span>[<span class="variable">i</span>] == 0):
+                                        <span class="variable">flag</span> = 0
+                                        <span class="keyword">for</span> <span class="variable">j</span> in <span class="function">range</span>(<span class="variable">m</span>):
+                                            <span class="keyword">if</span> (<span class="variable">need</span>[<span class="variable">i</span>][<span class="variable">j</span>] > <span class="variable">avail</span>[<span class="variable">j</span>]):
+                                                <span class="variable">flag</span> = 1
+                                                <span class="keyword">break</span>
+                                        
+                                        <span class="keyword">if</span> (<span class="variable">flag</span> == 0):
+                                            <span class="variable">ans</span>[<span class="variable">ind</span>] = <span class="variable">i</span>
+                                            <span class="variable">ind</span> += 1
+                                            <span class="keyword">for</span> <span class="variable">y</span> in <span class="function">range</span>(<span class="variable">m</span>):
+                                                <span class="variable">avail</span>[<span class="variable">y</span>] += <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">y</span>]
+                                            <span class="variable">f</span>[<span class="variable">i</span>] = 1
+                                            
+                        <span class="function">print</span>("Following is the SAFE Sequence")
+                        
+                        <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span> - 1):
+                            <span class="function">print</span>(" P", <span class="variable">ans</span>[<span class="variable">i</span>], " ->", sep="", <span class="keyword">end</span> ="")
+                        <span class="function">print</span>(" P", <span class="variable">ans</span>[<span class="variable">n</span> - 1], <span class="keyword">sep</span> ="")
+                        
+                    </strong>
+                    </code>
+                    </pre>
+                    
+                </p>
+            </div>
+
+            <div id="Sim" class="topic">
+                <h1>Banker's Algorithm Simulator</h1>
+                <label for="typesOfResources">Number of types of resources:</label>
+                <input type="text" id="typesOfResources"><br>
+
+                <div id="resourceInputs">
+                    <!-- Input fields for total instances of each resource -->
+                </div>
+
+                <label for="noOfProcesses">Number of processes:</label>
+                <input type="text" id="noOfProcesses"><br>
+
+                <div id="processes">
+                    <!-- Input fields for allocation and max need of each process -->
+                </div>
+
+                <button onclick="bankersAlgorithm()">Run Banker's Algorithm</button>
+                <div id="result"></div>
+                <script src="banker.js"></script>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
+
+
+</body>
+</html>
+
+

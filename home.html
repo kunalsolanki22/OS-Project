@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Project</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Scribble&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <!-- <a href="#">Logo</a> -->
+        </div>
+        <div class="menu">
+            <ul type= "none">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="subpart" class="jost-fonts">
+            <div class="button-group" >
+                <button onclick="redirectToPage('roundRobin.html')" class="rubik-scribble-regular">Round Robin</button>
+                <button onclick="redirectToPage('banker.html')" class="rubik-scribble-regular">Banker's Algorithm</button>
+            </div>
+        </div>
+        
+        <div class="subpart">
+            <div class="button-group">
+                <button onclick="redirectToPage('scanDisk.html')" class="rubik-scribble-regular">SCAN Disk scheduling</button>
+                <button onclick="redirectToPage('MRUpage.html')" class="rubik-scribble-regular">MRU Page</button>
+            </div>
+        </div>
+    </div>
+    <script src="home.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoundRobin</title>
+    <link rel="stylesheet" href="roundRobin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body class="jost-fonts">
+    <div class="container">
+        <div class="sidebar">
+            <div class="sticky">
+                <ul>
+                    <li><a href="#Intro">Introduction</a></li>
+                    <li><a href="#Theory">Theory</a></li>
+                    <li><a href="#Code">Code</a></li>
+                    <li><a href="#Sim">Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content">
+            <span class="top"><h1>Round Robin</h1></span>
+            <div id="Intro" class="topic">
+                <h2>Introduction</h2>
+                <p>
+                    <p>Round Robin is a CPU scheduling algorithm where each process is cyclically assigned a fixed time slot. It is the preemptive version of the First come First Serve CPU Scheduling algorithm.</p> 
+                    <ul>
+                    <li>Round Robin CPU Algorithm generally focuses on Time Sharing technique.</li> 
+                    <li>The period of time for which a process or job is allowed to run in a pre-emptive method is called time quantum.</li> 
+                    <li>Each process or job present in the ready queue is assigned the CPU for that time quantum, if the execution of the process is completed during that time then the process will end else the process will go back to the waiting table and wait for its next turn to complete the execution. </li>
+                    </ul>
+                </p>
+            </div>
+            <div id="Theory" class="topic">
+                <h2>Theory</h2>
+                <p>
+                    <span class="headings">Characteristics of Round Robin CPU Scheduling Algorithm</span>
+                    <ul>
+                        <li>It is simple, easy to implement, and starvation-free as all processes get a fair share of CPU.</li>
+                        <li>One of the most commonly used techniques in CPU scheduling is a core.</li>
+                        <li>It is preemptive as processes are assigned CPU only for a fixed slice of time at most.</li>
+                        <li>The disadvantage of it is more overhead of context switching.</li>
+                    </ul>
+                    
+                    <span class="headings">Advantages</span>
+                    <ul>
+                        <li>The newly created process is added to the end of the ready queue.</li>
+                        <li>A round-robin scheduler generally employs time-sharing, giving each job a time slot or quantum. </li>
+                        <li>While performing a round-robin scheduling, a particular time quantum is allotted to different jobs. </li>
+                        <li>Each process get a chance to reschedule after a particular quantum time in this scheduling. </li>
+                    </ul>
+                    
+                    <span class="headings">Disadvantages</span>
+                    <ul>
+                        <li>There is Larger waiting time and Response time.</li>
+                        <li>There is Low throughput.</li>
+                        <li>There is Context Switches.</li>
+                        <li>Gantt chart seems to come too big (if quantum time is less for scheduling. For Example:1 ms for big scheduling.)</li>
+                        <li>Time consuming scheduling for small quantum.</li>
+                    </ul>
+                </p>
+            </div>
+            <div id="Code" class="topic">
+                <h2>Code:</h2>
+                <p>
+                    <pre>
+                        <code>
+                        <strong>
+                            <span class="comment">// JavaScript program for implementation of RR scheduling</span>
+                        
+                            <span class="comment">// Function to find the waiting time for all processes</span>
+                            <span class="function">const</span> findWaitingTime = (<span class="variable">processes</span>, <span class="variable">n</span>, <span class="variable">bt</span>, <span class="variable">wt</span>, <span class="variable">quantum</span>) => {
+                                <span class="comment">// Make a copy of burst times bt[] to store remaining</span>
+                                <span class="comment">// burst times.</span>
+                                <span class="keyword">let</span> rem_bt = <span class="keyword">new</span> <span class="function">Array</span>(<span class="variable">n</span>).fill(0);
+                                <span class="keyword">for</span> (<span class="keyword">let</span> i = 0; i &lt; <span class="variable">n</span>; i++)
+                                    rem_bt[i] = <span class="variable">bt</span>[i];
+                        
+                                <span class="keyword">let</span> t = 0; <span class="comment">// Current time</span>
+                        
+                                <span class="comment">// Keep traversing processes in round robin manner</span>
+                                <span class="comment">// until all of them are not done.</span>
+                                <span class="keyword">while</span> (1) {
+                                    <span class="keyword">let</span> done = <span class="keyword">true</span>;
+                        
+                                    <span class="comment">// Traverse all processes one by one repeatedly</span>
+                                    <span class="keyword">for</span> (<span class="keyword">let</span> i = 0; i &lt; <span class="variable">n</span>; i++) {
+                                        <span class="comment">// If burst time of a process is greater than 0</span>
+                                        <span class="comment">// then only need to process further</span>
+                                        <span class="keyword">if</span> (rem_bt[i] &gt; 0) {
+                                            done = <span class="keyword">false</span>; <span class="comment">// There is a pending process</span>
+                        
+                                            <span class="keyword">if</span> (rem_bt[i] &gt; <span class="variable">quantum</span>) {
+                                                <span class="comment">// Increase the value of t i.e. shows</span>
+                                                <span class="comment">// how much time a process has been processed</span>
+                                                t += <span class="variable">quantum</span>;
+                        
+                                                <span class="comment">// Decrease the burst_time of current process</span>
+                                                <span class="comment">// by quantum</span>
+                                                rem_bt[i] -= <span class="variable">quantum</span>;
+                                            }
+                        
+                                            <span class="comment">// If burst time is smaller than or equal to</span>
+                                            <span class="comment">// quantum. Last cycle for this process</span>
+                                            <span class="keyword">else</span> {
+                                                <span class="comment">// Increase the value of t i.e. shows</span>
+                                                <span class="comment">// how much time a process has been processed</span>
+                                                t = t + rem_bt[i];
+                        
+                                                <span class="comment">// Waiting time is current time minus time</span>
+                                                <span class="comment">// used by this process</span>
+                                                <span class="variable">wt</span>[i] = t - <span class="variable">bt</span>[i];
+                        
+                                                <span class="comment">// As the process gets fully executed</span>
+                                                <span class="comment">// make its remaining burst time = 0</span>
+                                                rem_bt[i] = 0;
+                                            }
+                                        }
+                                    }
+                        
+                                    <span class="comment">// If all processes are done</span>
+                                    <span class="keyword">if</span> (done == <span class="keyword">true</span>)
+                                        <span class="keyword">break</span>;
+                                }
+                            }
+                        
+                            <span class="comment">// Function to calculate turn around time</span>
+                            <span class="keyword">const</span> findTurnAroundTime = (<span class="variable">processes</span>, <span class="variable">n</span>, <span class="variable">bt</span>, <span class="variable">wt</span>, <span class="variable">tat</span>) => {
+                                <span class="comment">// calculating turnaround time by adding</span>
+                                <span class="comment">// bt[i] + wt[i]</span>
+                                <span class="keyword">for</span> (<span class="keyword">let</span> i = 0; i &lt; <span class="variable">n</span>; i++)
+                                    <span class="variable">tat</span>[i] = <span class="variable">bt</span>[i] + <span class="variable">wt</span>[i];
+                            }
+                        
+                            <span class="comment">// Function to calculate average time</span>
+                            <span class="keyword">const</span> findavgTime = (<span class="variable">processes</span>, <span class="variable">n</span>, <span class="variable">bt</span>, <span class="variable">quantum</span>) => {
+                                <span class="keyword">let</span> <span class="variable">wt</span> = <span class="keyword">new</span> <span class="function">Array</span>(<span class="variable">n</span>).fill(0), <span class="variable">tat</span> = <span class="keyword">new</span> <span class="function">Array</span>(<span class="variable">n</span>).fill(0);
+                                <span class="keyword">let</span> total_wt = 0, total_tat = 0;
+                        
+                                <span class="comment">// Function to find waiting time of all processes</span>
+                                findWaitingTime(<span class="variable">processes</span>, <span class="variable">n</span>, <span class="variable">bt</span>, <span class="variable">wt</span>, <span class="variable">quantum</span>);
+                        
+                                <span class="comment">// Function to find turn around time for all processes</span>
+                                findTurnAroundTime(<span class="variable">processes</span>, <span class="variable">n</span>, <span class="variable">bt</span>, <span class="variable">wt</span>, <span class="variable">tat</span>);
+                        
+                                <span class="comment">// Display processes along with all details</span>
+                                document.write(`Processes Burst time Waiting time Turn around time`);
+                        
+                                <span class="comment">// Calculate total waiting time and total turn</span>
+                                <span class="comment">// around time</span>
+                                <span class="keyword">for</span> (<span class="keyword">let</span> i = 0; i &lt; <span class="variable">n</span>; i++) {
+                                    total_wt = total_wt + <span class="variable">wt</span>[i];
+                                    total_tat = total_tat + <span class="variable">tat</span>[i];
+                        
+                                    document.write(`${i + 1}&emsp;${<span class="variable">bt</span>[i]}&emsp;${<span class="variable">wt</span>[i]}&emsp;${<span class="variable">tat</span>[i]}`);
+                                }
+                        
+                                document.write(`Average waiting time = ${total_wt / <span class="variable">n</span>}`);
+                                document.write(`Average turn around time = ${total_tat / <span class="variable">n</span>}`);
+                            }
+                        </strong>
+                        </code>
+                    </pre>
+                </p>
+            </div>
+
+            <div id="Sim" class="topic">
+                <h2>Round Robin Scheduling</h2>
+                <label for="quantum">Enter Quantum:</label>
+                <input type="number" id="quantum" name="quantum" min="1" value="1">
+                <br><br>
+                <label for="arrivalTime">Arrival Time:</label>
+                <input type="number" id="arrivalTime" name="arrivalTime" min="0">
+                <label for="burstTime">Burst Time:</label>
+                <input type="number" id="burstTime" name="burstTime" min="1">
+                <button onclick="addProcess()">Add Process</button>
+                <br><br>
+                <table id="processTable">
+                    <tr>
+                        <th>Process</th>
+                        <th>Arrival Time</th>
+                        <th>Burst Time</th>
+                        <th>Completion Time</th>
+                        <th>Turnaround Time</th>
+                        <th>Waiting Time</th>
+                    </tr>
+                </table>
+                <button onclick="calculate()">Calculate</button>
+
+                <div id="chart-container">
+                    <canvas id="Chart"></canvas>
+                </div>
+                <script src="roundRobin.js"></script>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
+
+
+</body>
+</html>
+
+

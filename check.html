@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Round Robin Scheduling</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Round Robin Scheduling</h2>
+    <label for="quantum">Enter Quantum:</label>
+    <input type="number" id="quantum" name="quantum" min="1" value="1">
+    <br><br>
+    <label for="arrivalTime">Arrival Time:</label>
+    <input type="number" id="arrivalTime" name="arrivalTime" min="0">
+    <label for="burstTime">Burst Time:</label>
+    <input type="number" id="burstTime" name="burstTime" min="1">
+    <button onclick="addProcess()">Add Process</button>
+    <br><br>
+    <table id="processTable">
+        <tr>
+            <th>Process</th>
+            <th>Arrival Time</th>
+            <th>Burst Time</th>
+            <th>Completion Time</th>
+            <th>Waiting Time</th>
+            <th>Turnaround Time</th>
+        </tr>
+    </table>
+    <button onclick="calculate()">Calculate</button>
+    <script>
+        let processes = [];
+
+        function addProcess() {
+            let arrivalTime = parseInt(document.getElementById('arrivalTime').value);
+            let burstTime = parseInt(document.getElementById('burstTime').value);
+            processes.push({ id: processes.length + 1, arrivalTime: arrivalTime, burstTime: burstTime });
+            document.getElementById('arrivalTime').value = '';
+            document.getElementById('burstTime').value = '';
+            updateTable();
+        }
+
+        function updateTable() {
+            let table = document.getElementById('processTable');
+            table.innerHTML = '';
+            let headerRow = table.insertRow(0);
+            headerRow.innerHTML = '<th>Process</th><th>Arrival Time</th><th>Burst Time</th><th>Completion Time</th><th>Waiting Time</th><th>Turnaround Time</th>';
+
+            for (let i = 0; i < processes.length; i++) {
+                let row = table.insertRow(-1);
+                row.innerHTML = '<td>' + processes[i].id + '</td><td>' + processes[i].arrivalTime + '</td><td>' + processes[i].burstTime + '</td><td></td><td></td><td></td>';
+            }
+        }
+
+        function calculate() {
+            let quantum = parseInt(document.getElementById('quantum').value);
+            let n = processes.length;
+            let remainingBurstTime = new Array(n);
+            let waitingTime = new Array(n).fill(0);
+            let turnaroundTime = new Array(n).fill(0);
+            let completionTime = new Array(n).fill(0);
+            let currentTime = 0;
+
+            for (let i = 0; i < n; i++) {
+                remainingBurstTime[i] = processes[i].burstTime;
+            }
+
+            while (true) {
+                let done = true;
+
+                for (let i = 0; i < n; i++) {
+                    if (remainingBurstTime[i] > 0) {
+                        done = false;
+
+                        if (remainingBurstTime[i] > quantum) {
+                            currentTime += quantum;
+                            remainingBurstTime[i] -= quantum;
+                        } else {
+                            currentTime += remainingBurstTime[i];
+                            waitingTime[i] = currentTime - processes[i].burstTime - processes[i].arrivalTime;
+                            remainingBurstTime[i] = 0;
+                            completionTime[i] = currentTime;
+                        }
+                    }
+                }
+
+                if (done === true) {
+                    break;
+                }
+            }
+
+            for (let i = 0; i < n; i++) {
+                turnaroundTime[i] = completionTime[i] - processes[i].arrivalTime;
+            }
+
+            let table = document.getElementById('processTable');
+            for (let i = 0; i < n; i++) {
+                table.rows[i + 1].cells[3].innerHTML = completionTime[i];
+                table.rows[i + 1].cells[4].innerHTML = waitingTime[i];
+                table.rows[i + 1].cells[5].innerHTML = turnaroundTime[i];
+            }
+        }
+    </script>
+</body>
+</html>

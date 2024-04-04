@@ -1,0 +1,134 @@
+html{
+    height: 100%;
+}
+
+body {
+    background-image: url("homeButton.jpg");
+    background-size: contain;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #b7b7b7;
+    min-height: 100%;
+    position: relative;
+}
+
+.rubik-scribble-regular {
+    font-family: "Rubik Scribble", system-ui;
+    font-weight:bolder;
+    font-style: normal;
+    font-size: 30px;
+}
+.navbar {
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    padding: 10px 20px;
+}
+
+.logo a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu li {
+    margin-right: 20px;
+}
+
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    transition: color 0.3s;
+}
+
+.menu a:hover {
+    color: #f8b400;
+}
+
+.content {
+    padding: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .menu {
+        margin-top: 10px;
+    }
+
+    .menu ul {
+        flex-direction: column;
+    }
+
+    .menu li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    /* padding: 30px; */
+    background:linear-gradient(to right,rgb(75, 73, 73), rgb(0,0,0) );
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.subpart{
+    /* align-items: center; */
+    /* margin-right: 20px; */
+    padding: 25px;
+    text-align: center;
+}
+
+.button-group {
+    display: flex;
+}
+
+button {
+    
+    flex: 1;
+    width: 40%;
+    height: 200px;
+    padding: 8px 15px   ;
+    margin: 15px;
+    background:linear-gradient(to right,rgb(1, 93, 123), rgb(153, 163, 165) );
+    color: #000000;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.9);
+    background-color: #0056b3;
+}
+
+button:focus {
+    outline: none;
+}
+
+button.highlight:hover {
+    background-color: #0056b3;
+}
+
+.highlighted {
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}

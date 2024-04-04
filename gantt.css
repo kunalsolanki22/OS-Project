@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+.topic {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #007bff;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="number"],
+button {
+    padding: 5px 10px;
+    margin-right: 10px;
+    border: 1px solid #007bff;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type="number"]:focus,
+button:focus {
+    outline: none;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.chart {
+    display: flex;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.process {
+    flex-grow: 1;
+    padding: 10px;
+    text-align: center;
+    border-right: 1px solid #007bff;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.chart .process:last-child {
+    border-right: none;
+}
+
+#chart-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+canvas {
+    border: 1px solid #007bff;
+    border-radius: 5px;
+}
