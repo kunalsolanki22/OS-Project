@@ -9,10 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- <script></script> -->
+    <!-- <script>
+
+    </script> -->
 
 </head>
 <body class="jost-fonts">
+    <script src="banker.js"></script>
     <div class="container">
         <div class="sidebar">
             <div class="sticky">
@@ -75,58 +78,72 @@
                     <pre>
                     <code>
                     <strong>
-                        <span class="comment"># Banker's Algorithm</span>
+        <span class="variable">let</span> <span class="variable">n</span>, <span class="variable">m</span>, <span class="variable">i</span>, <span class="variable">j</span>, <span class="variable">k</span>;
+        <span class="variable">n</span> = 5; <span class="comment">// Number of processes</span>
+        <span class="variable">m</span> = 3; <span class="comment">// Number of resources</span>
+        <span class="keyword">let</span> <span class="variable">alloc</span> = [ [ 0, 1, 0 ], <span class="comment">// P0 // Allocation Matrix</span>
+                        [ 2, 0, 0 ], <span class="comment">// P1</span>
+                        [ 3, 0, 2 ], <span class="comment">// P2</span>
+                        [ 2, 1, 1 ], <span class="comment">// P3</span>
+                        [ 0, 0, 2 ] ]; <span class="comment">// P4</span>
 
-                        <span class="comment"># Driver code:</span>
-                        <span class="keyword">if</span> <span class="variable">__name__</span>=="<span class="keyword">__main__</span>":
-                            
-                            <span class="comment"># P0, P1, P2, P3, P4 are the Process names here</span>
-                            <span class="variable">n</span> = 5 <span class="comment"># Number of processes</span>
-                            <span class="variable">m</span> = 3 <span class="comment"># Number of resources</span>
-                            
-                            <span class="comment"># Allocation Matrix</span>
-                            <span class="variable">alloc</span> = [[0, 1, 0 ],[ 2, 0, 0 ],
-                                    [3, 0, 2 ],[2, 1, 1] ,[ 0, 0, 2]]
-                            
-                            <span class="comment"># MAX Matrix </span>
-                            <span class="variable">max</span> = [[7, 5, 3 ],[3, 2, 2 ],
-                                    [ 9, 0, 2 ],[2, 2, 2],[4, 3, 3]]
-                            
-                            <span class="variable">avail</span> = [3, 3, 2] <span class="comment"># Available Resources</span>
-                            
-                            <span class="variable">f</span> = [0]*<span class="variable">n</span>
-                            <span class="variable">ans</span> = [0]*<span class="variable">n</span>
-                            <span class="variable">ind</span> = 0
-                            <span class="keyword">for</span> <span class="variable">k</span> in <span class="function">range</span>(<span class="variable">n</span>):
-                                <span class="variable">f</span>[<span class="variable">k</span>] = 0
-                                
-                            <span class="variable">need</span> = [[ 0 <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">m</span>)]<span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span>)]
-                            <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span>):
-                                <span class="keyword">for</span> <span class="variable">j</span> in <span class="function">range</span>(<span class="variable">m</span>):
-                                    <span class="variable">need</span>[<span class="variable">i</span>][<span class="variable">j</span>] = <span class="variable">max</span>[<span class="variable">i</span>][<span class="variable">j</span>] - <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">j</span>]
-                            <span class="variable">y</span> = 0
-                            <span class="keyword">for</span> <span class="variable">k</span> in <span class="function">range</span>(5):
-                                <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span>):
-                                    <span class="keyword">if</span> (<span class="variable">f</span>[<span class="variable">i</span>] == 0):
-                                        <span class="variable">flag</span> = 0
-                                        <span class="keyword">for</span> <span class="variable">j</span> in <span class="function">range</span>(<span class="variable">m</span>):
-                                            <span class="keyword">if</span> (<span class="variable">need</span>[<span class="variable">i</span>][<span class="variable">j</span>] > <span class="variable">avail</span>[<span class="variable">j</span>]):
-                                                <span class="variable">flag</span> = 1
-                                                <span class="keyword">break</span>
-                                        
-                                        <span class="keyword">if</span> (<span class="variable">flag</span> == 0):
-                                            <span class="variable">ans</span>[<span class="variable">ind</span>] = <span class="variable">i</span>
-                                            <span class="variable">ind</span> += 1
-                                            <span class="keyword">for</span> <span class="variable">y</span> in <span class="function">range</span>(<span class="variable">m</span>):
-                                                <span class="variable">avail</span>[<span class="variable">y</span>] += <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">y</span>]
-                                            <span class="variable">f</span>[<span class="variable">i</span>] = 1
-                                            
-                        <span class="function">print</span>("Following is the SAFE Sequence")
-                        
-                        <span class="keyword">for</span> <span class="variable">i</span> in <span class="function">range</span>(<span class="variable">n</span> - 1):
-                            <span class="function">print</span>(" P", <span class="variable">ans</span>[<span class="variable">i</span>], " ->", sep="", <span class="keyword">end</span> ="")
-                        <span class="function">print</span>(" P", <span class="variable">ans</span>[<span class="variable">n</span> - 1], <span class="keyword">sep</span> ="")
-                        
+        <span class="keyword">let</span> <span class="variable">max</span> = [ [ 7, 5, 3 ], <span class="comment">// P0 // MAX Matrix</span>
+                    [ 3, 2, 2 ], <span class="comment">// P1</span>
+                    [ 9, 0, 2 ], <span class="comment">// P2</span>
+                    [ 2, 2, 2 ], <span class="comment">// P3</span>
+                    [ 4, 3, 3 ] ]; <span class="comment">// P4</span>
+
+        <span class="keyword">let</span> <span class="variable">totalResources</span> = [10, 5, 5]; <span class="comment">// Total instances of resources</span>
+
+        <span class="comment">// Calculate available resources</span>
+        <span class="keyword">let</span> <span class="variable">sumAllocated</span> = <span class="keyword">new</span> <span class="function">Array</span>(<span class="variable">m</span>).<span class="function">fill</span>(0);
+        <span class="keyword">for</span> (<span class="variable">i</span> = 0; <span class="variable">i</span> &lt; <span class="variable">m</span>; <span class="variable">i</span>++) {
+            <span class="keyword">for</span> (<span class="variable">j</span> = 0; <span class="variable">j</span> &lt; <span class="variable">n</span>; <span class="variable">j</span>++) {
+                <span class="variable">sumAllocated</span>[<span class="variable">i</span>] += <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">j</span>];
+            }
+        }
+        <span class="keyword">let</span> <span class="variable">avail</span> = <span class="variable">totalResources</span>.<span class="function">map</span>((<span class="variable">value</span>, <span class="variable">index</span>) => <span class="variable">value</span> - <span class="variable">sumAllocated</span>[<span class="variable">index</span>]);
+
+        <span class="keyword">let</span> <span class="variable">f</span> = [], <span class="variable">ans</span> = [], <span class="variable">ind</span> = 0;
+        <span class="keyword">for</span> (<span class="variable">k</span> = 0; <span class="variable">k</span> &lt; <span class="variable">n</span>; <span class="variable">k</span>++) {
+            <span class="variable">f</span>[<span class="variable">k</span>] = 0;
+        }
+        <span class="keyword">let</span> <span class="variable">need</span> = [];
+        <span class="keyword">for</span> (<span class="variable">i</span> = 0; <span class="variable">i</span> &lt; <span class="variable">n</span>; <span class="variable">i</span>++) {
+            <span class="keyword">let</span> <span class="variable">need1</span> = [];
+            <span class="keyword">for</span> (<span class="variable">j</span> = 0; <span class="variable">j</span> &lt; <span class="variable">m</span>; <span class="variable">j</span>++)
+                <span class="variable">need1</span>.<span class="function">push</span>(<span class="variable">max</span>[<span class="variable">i</span>][<span class="variable">j</span>] - <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">j</span>]);
+            <span class="variable">need</span>.<span class="function">push</span>(<span class="variable">need1</span>);
+        }
+
+        <span class="keyword">let</span> <span class="variable">y</span> = 0;
+        <span class="keyword">for</span> (<span class="variable">k</span> = 0; <span class="variable">k</span> &lt; 5; <span class="variable">k</span>++) {
+            <span class="keyword">for</span> (<span class="variable">i</span> = 0; <span class="variable">i</span> &lt; <span class="variable">n</span>; <span class="variable">i</span>++) {
+            <span class="keyword">if</span> (<span class="variable">f</span>[<span class="variable">i</span>] == 0) {
+
+                <span class="keyword">let</span> <span class="variable">flag</span> = 0;
+                <span class="keyword">for</span> (<span class="variable">j</span> = 0; <span class="variable">j</span> &lt; <span class="variable">m</span>; <span class="variable">j</span>++) {
+                <span class="keyword">if</span> (<span class="variable">need</span>[<span class="variable">i</span>][<span class="variable">j</span>] &gt; <span class="variable">avail</span>[<span class="variable">j</span>]){
+                    <span class="variable">flag</span> = 1;
+                    <span class="keyword">break</span>;
+                }
+                }
+
+                <span class="keyword">if</span> (<span class="variable">flag</span> == 0) {
+                <span class="variable">ans</span>[<span class="variable">ind</span>++] = <span class="variable">i</span>;
+                <span class="keyword">for</span> (<span class="variable">y</span> = 0; <span class="variable">y</span> &lt; <span class="variable">m</span>; <span class="variable">y</span>++)
+                    <span class="variable">avail</span>[<span class="variable">y</span>] += <span class="variable">alloc</span>[<span class="variable">i</span>][<span class="variable">y</span>];
+                <span class="variable">f</span>[<span class="variable">i</span>] = 1;
+                }
+            }
+            }
+        }
+
+        document.write("Following is the SAFE Sequence" + "&lt;br&gt;");
+        <span class="keyword">for</span> (<span class="variable">i</span> = 0; <span class="variable">i</span> &lt; <span class="variable">n</span> - 1; <span class="variable">i</span>++)
+            document.write(" P" + <span class="variable">ans</span>[<span class="variable">i</span>] + " -&gt;");
+        document.write( " P" + <span class="variable">ans</span>[<span class="variable">n</span> - 1] + "&lt;br&gt;");
+
                     </strong>
                     </code>
                     </pre>
@@ -163,5 +180,3 @@
 
 </body>
 </html>
-
-

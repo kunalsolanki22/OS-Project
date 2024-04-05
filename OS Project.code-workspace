@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../WebD"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "OS Project"
+	}
+}
