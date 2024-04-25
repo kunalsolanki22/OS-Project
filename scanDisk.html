@@ -3,9 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>scanDisk</title>
+    <title>Scan Disk Algorithm</title>
+    <link rel="stylesheet" href="banker.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script>
+
+    </script> -->
+
 </head>
-<body>
-    <p>asd</p>
+<body class="jost-fonts">
+    <script src="banker.js"></script>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sticky">
+                <ul>
+                    <li><a href="#Intro">Introduction</a></li>
+                    <li><a href="#Theory">Theory</a></li>
+                    <li><a href="#Code">Code</a></li>
+                    <li><a href="#Sim">Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <span><h1>Scan Disk Algorithm</h1></span>
+            <div id="Intro" class="topic">
+                <h2>Introduction</h2>
+                <p>
+                    In the SCAN Disk Scheduling Algorithm, the head starts from one end of the disk and moves towards the other end, servicing requests in between one by one and reaching the other end. Then the direction of the head is reversed and the process continues as the head continuously scans back and forth to access the disk. So, this algorithm works as an elevator and is hence also known as the elevator algorithm. As a result, the requests at the midrange are serviced more and those arriving behind the disk arm will have to wait.
+                </p>
+            </div>
+            <div id="Theory" class="topic">
+                <h2>Theory</h2>
+                <p>
+                    <span class="headings">Characteristics of Scan Disk Algorithm</span><br><br>
+
+                    <p>The Scan algorithm is often used in situations where there is a mix of read and write requests and is favored for its efficiency in servicing requests that are close together on the disk, minimizing the arm movement and improving overall disk performance.</p>
+
+                    <p>Here's a basic outline of how the algorithm works:</p>
+
+                    <ol>
+                        <li>The disk arm starts at one end of the disk and moves towards the other end, servicing requests along the way.</li>
+                        <li>Requests are serviced in the direction of the arm's movement until there are no more requests in that direction.</li>
+                        <li>When there are no more requests in the current direction, the arm reverses direction and starts servicing requests in the opposite direction until there are no more requests in that direction.</li>
+                        <li>The arm continues to move back and forth until all requests have been serviced.</li>
+                    </ol>
+                    
+                    <span class="headings">Advantages</span>
+                    <ul>
+                        <li><b> Fairness:</b> The Scan algorithm ensures that all requests are eventually serviced, preventing starvation where some requests are never serviced.</li>
+                        <li><b>Efficiency:</b> It is efficient in servicing requests that are close together on the disk, reducing the overall seek time and improving disk performance.</li>
+                        <li><b>Simplicity: </b> The algorithm is relatively simple to implement and understand compared to more complex disk scheduling algorithms.</li>
+                    </ul>
+                    
+                    <span class="headings">Disadva2ntages</span>
+                    <ul>
+                        <li><b>Scheduling Bias:</b> The Scan algorithm exhibits a scheduling bias towards requests located near the disk's middle, as it always moves towards the other end of the disk before servicing requests in the opposite direction. This can lead to increased response times for requests located at the extremes of the disk.</li>
+                        <li><b>Starvation:</b> Although the algorithm prevents starvation in theory, in practice, it can still lead to some requests waiting indefinitely if there is a continuous stream of requests in one direction.</li>
+                        <li><b>Inefficiency with Varying Loads:</b>The Scan algorithm may not perform optimally in environments with varying loads or when there are sudden bursts of requests, as it does not adapt its behavior dynamically.</li>
+
+                    </ul>
+                </p>
+            </div>
+            <div id="Code" class="topic">
+                <h2>Code:</h2>
+                <p>
+                    <pre><code>
+                        <strong>
+                        <span class="comment">// Javascript program to demonstrate</span>
+                        <span class="comment">// SCAN Disk Scheduling algorithm</span>
+                          
+                        <span class="variable">let</span> size = 8;
+                        <span class="variable">let</span> disk_size = 200;
+                     
+                        <span class="function">function</span> SCAN(arr, head, direction)
+                        {
+                            <span class="variable">let</span> seek_count = 0;
+                            <span class="variable">let</span> distance, cur_track;
+                            <span class="variable">let</span> left = [], right = [];
+                            <span class="variable">let</span> seek_sequence = [];
+                     
+                            <span class="comment">// appending end values</span>
+                            <span class="comment">// which has to be visited</span>
+                            <span class="comment">// before reversing the direction</span>
+                            <span class="keyword">if</span> (direction == "left")
+                                left.push(0);
+                            <span class="keyword">else if</span> (direction == "right")
+                                right.push(disk_size - 1);
+                     
+                            <span class="keyword">for</span> (let i = 0; i &lt; size; i++)
+                            {
+                                <span class="keyword">if</span> (arr[i] &lt; head)
+                                    left.push(arr[i]);
+                                <span class="keyword">if</span> (arr[i] &gt; head)
+                                    right.push(arr[i]);
+                            }
+                     
+                            <span class="comment">// sorting left and right vectors</span>
+                            left.sort(<span class="function">function</span>(a, b){<span class="keyword">return</span> a - b});
+                            right.sort(<span class="function">function</span>(a, b){<span class="keyword">return</span> a - b});
+                     
+                            <span class="comment">// run the while loop two times.</span>
+                            <span class="comment">// one by one scanning right</span>
+                            <span class="comment">// and left of the head</span>
+                            <span class="variable">let</span> run = 2;
+                            <span class="keyword">while</span> (run-- &gt;0)
+                            {
+                                <span class="keyword">if</span> (direction == "left")
+                                {
+                                    <span class="keyword">for</span> (let i = left.length - 1; i &gt;= 0; i--)
+                                    {
+                                        cur_track = left[i];
+                     
+                                        <span class="comment">// appending current track to seek sequence</span>
+                                        seek_sequence.push(cur_track);
+                     
+                                        <span class="comment">// calculate absolute distance</span>
+                                        distance = Math.abs(cur_track - head);
+                     
+                                        <span class="comment">// increase the total count</span>
+                                        seek_count += distance;
+                     
+                                        <span class="comment">// accessed track is now the new head</span>
+                                        head = cur_track;
+                                    }
+                                    direction = "right";
+                                }
+                                <span class="keyword">else if</span> (direction == "right")
+                                {
+                                    <span class="keyword">for</span> (let i = 0; i &lt; right.length; i++)
+                                    {
+                                        cur_track = right[i];
+                     
+                                        <span class="comment">// appending current track to seek sequence</span>
+                                        seek_sequence.push(cur_track);
+                     
+                                        <span class="comment">// calculate absolute distance</span>
+                                        distance = Math.abs(cur_track - head);
+                     
+                                        <span class="comment">// increase the total count</span>
+                                        seek_count += distance;
+                     
+                                        <span class="comment">// accessed track is now new head</span>
+                                        head = cur_track;
+                                    }
+                                    direction = "left";
+                                }
+                            }
+                     
+                            document.write("Total number of seek operations = "
+                                                + seek_count + "&lt;br&gt;");
+                            document.write("Seek Sequence is" + "&lt;br&gt;");
+                            <span class="keyword">for</span> (let i = 0; i &lt; seek_sequence.length; i++)
+                            {
+                                document.write(seek_sequence[i] + "&lt;br&gt;");
+                            }
+                        }
+                         
+                        <span class="comment">// request array</span>
+                         
+                        <span class="variable">let</span> arr = [ 176, 79, 34, 60, 92, 11, 41, 114 ];
+                        <span class="variable">let</span> head = 50;
+                        <span class="variable">let</span> direction = "left";
+                      
+                        SCAN(arr, head, direction);
+                    </strong>
+
+                        </code></pre>
+                    
+                </p>
+            </div>
+
+            <div id="Sim" class="topic">
+                <h2>Example</h2>
+                <img src="fcfs-2.jpg" alt="" class="ex">
+                <pre>
+                <code>  
+                    Input: 
+                        Request sequence = {176, 79, 34, 60, 92, 11, 41, 114}
+                        
+                        Initial head position = 50
+                        
+                        Direction = left (We are moving from right to left)
+                    Output:
+                        Total number of seek operations = 226
+                        
+                        Seek Sequence is
+                        41
+                        34
+                        11
+                        0
+                        60
+                        79
+                        92
+                        114
+                        176
+                </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
+
+
 </body>
 </html>

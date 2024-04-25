@@ -3,9 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MRUpage</title>
+    <title>Most Recently Used Page Algorithm</title>
+    <link rel="stylesheet" href="MRUpage.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Rubik+Scribble&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script>
+
+    </script> -->
+
 </head>
-<body>
-    
+<body class="jost-fonts">
+    <script src="MRUpage.js"></script>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sticky">
+                <ul>
+                    <li><a href="#Intro">Introduction</a></li>
+                    <li><a href="#Theory">Theory</a></li>
+                    <li><a href="#Code">Code</a></li>
+                    <li><a href="#Sim">Simulation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <span><h1>Most Recently Used Page Algorithm</h1></span>
+            <div id="Intro" class="topic">
+                <h2>Introduction</h2>
+                <p>
+                    <p>
+                        In a virtual memory system, programs are divided into fixed-size blocks called pages. These pages are stored in the main memory (RAM) or in secondary storage (like a hard disk) as needed. However, since the physical memory is limited, the operating system needs to decide which pages to keep in RAM and which pages to replace when new pages need to be loaded. This is where page replacement algorithms come into play.
+                    </p>
+                    <p>
+                        Page replacement algorithms aim to optimize memory utilization, minimize page faults (when a requested page is not in memory), and maintain a balance between keeping frequently accessed pages in RAM and making room for new pages. Choosing the right page replacement algorithm can significantly impact a system’s performance and efficiency.
+                    </p>
+                    <p>
+                        Several page replacement algorithms have been developed over the years, each with its own advantages and disadvantages. Let’s take a closer look at one of the most well-known algorithms, the MOST RECENTLY USED PAGE ALGORITHM:
+                    </p>
+                </p>
+            </div>
+            <div id="Theory" class="topic">
+                <h2>Theory</h2>
+                <p>
+                    <span class="headings">Characteristics of MRU Page Algorithm</span>
+
+                    <p>The Most Recently Used (MRU) page replacement algorithm is a memory management scheme where the page that has been most recently accessed is the one selected for eviction when a page replacement is necessary. It operates on the principle of locality, assuming that the pages most recently accessed are likely to be accessed again in the near future.
+                    <ol>
+                        <li><strong>Page Reference:</strong> When a page is referenced (accessed), it is marked as the most recently used page.</li><br>
+                        <li><strong>Page Replacement:</strong> When a new page needs to be loaded into memory and there is no free space, the page that was most recently accessed (MRU) is replaced.</li><br>
+                        <li><strong>No History Considered:</strong> MRU does not consider the history of page accesses. It only looks at the most recent access when deciding which page to evict.</li><br>
+                        <li><strong>Overhead:</strong> MRU requires keeping track of the order of page accesses, which can add overhead.</li><br>
+                    </ol>
+
+                    <img src="mru.png" alt="Error"><br>
+                    
+                    <span class="headings">Advantages</span>
+                    <ul>
+ 
+                        <li><b>Simplicity:</b> The MRU algorithm is easy to implement and understand compared to other page replacement algorithms.</li><br>
+                        <li><b>Reduced Memory Access Time:</b> MRU is based on the principle of locality, which means that recently used pages are likely to be used again in the near future. As a result, the MRU algorithm can reduce memory access time by keeping frequently used pages in memory.
+                        </li><br>
+                        <li><b>Efficient for Specific Workloads:</b> MRU performs well in workloads where there is a high degree of temporal locality, meaning that the same pages are accessed repeatedly in a short period of time.</li>
+                    </ul>
+                    
+                    <span class="headings">Disadvantages</span>
+                    <ul>
+                        <li><b>Inefficient for Some Workloads:</b> The MRU algorithm may perform poorly in workloads where there is a high degree of spatial locality, meaning that adjacent pages are likely to be accessed together. In such cases, the MRU algorithm may evict pages that are still needed.</li><br>
+                        <li><b>Poor Handling of Infrequently Used Pages:</b> MRU does not take into account how long ago a page was accessed, only whether it was the most recently accessed. This can lead to inefficient use of memory if pages that are accessed infrequently are kept in memory while more frequently used pages are evicted.</li><br>
+                        <li><b>High Overhead:</b>  The MRU algorithm requires keeping track of the order in which pages are accessed, which can add overhead to the system.</li><br>
+                    </ul>
+                </p>
+            </div>
+            <div id="Code" class="topic">
+                <h2>Code:</h2>
+                <p>
+                <pre>
+                <strong>
+                    <code>
+                    <span class="function">function</span> mruPageAlgorithm(<span class="variable">pageFrames</span>, <span class="variable">pageReferences</span>) {
+                        let <span class="variable">frame</span> = Array(<span class="variable">pageFrames</span>).fill(-1); <span class="comment">// Initialize page frames with -1 indicating empty</span>
+                        let <span class="variable">pageFaults</span> = 0;
+                
+                        <span class="keyword">for</span> (let i = 0; i < <span class="variable">pageReferences</span>.length; i++) {
+                            let <span class="variable">pageIndex</span> = <span class="variable">frame</span>.indexOf(<span class="variable">pageReferences</span>[i]);
+            
+                            <span class="keyword">if</span> (<span class="variable">pageIndex</span> === -1) {
+                                <span class="variable">pageFaults</span>++;
+                                <span class="comment">// Find the index of the most recently used page in the frame</span>
+                                let <span class="variable">mruIndex</span> = <span class="variable">frame</span>.reduce((acc, val, index) => {
+                                    <span class="keyword">return</span> val === -1 || (acc !== -1 && <span class="variable">frame</span>.indexOf(acc) < <span class="variable">frame</span>.indexOf(val)) ? acc : val;
+                                }, -1);
+                                <span class="comment">// Replace the most recently used page with the current page reference</span>
+                                <span class="variable">frame</span>[<span class="variable">frame</span>.indexOf(<span class="variable">mruIndex</span>)] = <span class="variable">pageReferences</span>[i];
+                            }
+                        }
+            
+                        <span class="keyword">return</span> <span class="variable">pageFaults</span>;
+                    }
+                
+                    <span class="comment">// Example usage</span>
+                    let <span class="variable">pageReferences</span> = [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 3];
+                    let <span class="variable">pageFrames</span> = 4;
+                    let <span class="variable">totalPageFaults</span> = mruPageAlgorithm(<span class="variable">pageFrames</span>, <span class="variable">pageReferences</span>);
+                
+                    console.log("Total Page Faults:", <span class="variable">totalPageFaults</span>); <span class="comment">// Output: 12</span>
+                </code>
+                </strong>
+                </pre>
+                    
+                </p>
+            </div>
+
+            <div id="Sim" class="topic">
+                <h1>MRU Page Algorithm Simulator</h1>
+                <label for="pageFrames">Number of Page Frames:</label>
+                <input type="number" id="pageFrames" value="4">
+                <br>
+                <label for="pageReferences">Page References (comma-separated):</label>
+                <input type="text" id="pageReferences" value="7,0,1,2,0,3,0,4,2,3,0,3,2,3">
+                <br>
+                <button onclick="runMRUPageAlgorithm()">Run Simulator</button>
+                <br>
+                <p id="output"></p>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
